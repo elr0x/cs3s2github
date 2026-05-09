@@ -1,0 +1,58 @@
+services:
+  # Monitoring Web Frontend (and Integrated API)
+  monitoring-web:
+    build:
+      context: ./monitoring-web
+      dockerfile: Dockerfile
+    container_name: monitoring-web
+    ports:
+      - "5001:5001"
+    environment:
+      FLASK_ENV: development
+      FLASK_DEBUG: "true"
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-key-change-in-production}
+      API_BASE_URL: http://localhost:5001/api/v1
+      API_KEY: ${API_KEY:-dev-api-key-change-in-production}
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING:-}
+      API_TIMEOUT: 10
+      METRICS_REFRESH_INTERVAL: 30
+      HEALTH_REFRESH_INTERVAL: 60
+      FLASK_HOST: 0.0.0.0
+      FLASK_PORT: 5001
+      AUTH_ENABLED: ${AUTH_ENABLED:-false}
+      ENTRA_ID_CLIENT_ID: ${ENTRA_ID_CLIENT_ID:-}
+      ENTRA_ID_CLIENT_SECRET: ${ENTRA_ID_CLIENT_SECRET:-}
+      ENTRA_ID_TENANT_ID: ${ENTRA_ID_TENANT_ID:-}
+      REDIRECT_URI: ${REDIRECT_URI:-http://localhost:5001/auth/callback}
+    volumes:
+      - ./monitoring-web:/app
+    networks:
+      - monitoring
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:5001/api/v1/health/status', timeout=5).raise_for_status()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Monitoring Client (optional - for data collection)
+  monitoring-client:
+    build:
+      context: ./monitoring-client
+      dockerfile: Dockerfile
+    container_name: monitoring-client
+    environment:
+      MONITOR_API_URL: http://monitoring-web:5001/api/v1
+      MONITOR_API_KEY: ${API_KEY:-dev-api-key-change-in-production}
+      COLLECTION_INTERVAL: 60
+    networks:
+      - monitoring
+    depends_on:
+      monitoring-web:
+        condition: service_healthy
+    profiles:
+      - collection
+
+networks:
+  monitoring:
+    driver: bridge

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "spaincentral"
+    },
+    "appServicePlanName": {
+      "value": "asp-knowledgehub-api"
+    },
+    "webAppName": {
+      "value": "app-knowledgehub-api"
+    },
+    "pythonVersion": {
+      "value": "PYTHON|3.11"
+    },
+    "spoke1VnetId": {
+      "value": "/subscriptions/554f55c1-f911-4e54-8172-c2eaad0e35b0/resourceGroups/rg-knowledgehub-spoke1/providers/Microsoft.Network/virtualNetworks/vnet-spoke1-app"
+    },
+    "appSubnetId": {
+      "value": "/subscriptions/554f55c1-f911-4e54-8172-c2eaad0e35b0/resourceGroups/rg-knowledgehub-spoke1/providers/Microsoft.Network/virtualNetworks/vnet-spoke1-app/subnets/AppSubnet"
+    },
+    "hubVnetId": {
+      "value": "/subscriptions/554f55c1-f911-4e54-8172-c2eaad0e35b0/resourceGroups/IN-NCB_VPN/providers/Microsoft.Network/virtualNetworks/IN-NCB_Vnet"
+    },
+    "dbConnectionString": {
+      "value": "Driver={ODBC Driver 18 for SQL Server};Server=tcp:sql-knowledgehub-dev.database.windows.net,1433;Database=db-monitoring;Uid=sqladmin;Pwd=<YOUR_PASSWORD>;Encrypt=yes;TrustServerCertificate=no"
+    },
+    "apiKey": {
+      "value": "<YOUR_STRONG_API_KEY>"
+    }
+  }
+}
