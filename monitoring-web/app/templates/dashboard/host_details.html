@@ -99,7 +99,9 @@
                 {% endif %}
 
                 <!-- Mini Chart -->
-                <canvas id="chart-{{ loop.index }}" class="mt-3" height="60"></canvas>
+                <div style="position: relative; height: 120px; width: 100%;" class="mt-3">
+                    <canvas id="chart-{{ loop.index }}"></canvas>
+                </div>
             </div>
         </div>
     </div>
