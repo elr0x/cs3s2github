@@ -89,7 +89,8 @@ class DataProcessor:
         """
         summary = {"OK": 0, "WARNING": 0, "CRITICAL": 0, "UNKNOWN": 0}
         for metric in metrics:
-            status = metric.get("status", "UNKNOWN").upper()
+            raw_status = metric.get("status") or "UNKNOWN"
+            status = raw_status.upper()
             if status in summary:
                 summary[status] += 1
             else:
