@@ -108,7 +108,7 @@
 
 |Subtask|Description|State|
 |---|---|---|
-|Extend pipeline with automated deployment|Add deployment steps to Azure Container Apps in the GitHub Actions workflow|🔲 To Do|
+|Extend pipeline with automated deployment|Add deployment steps to Azure Container Apps in the GitHub Actions workflow|✅ Done|
 
 ## Task 9: Container Platform Monitoring
 
@@ -234,7 +234,7 @@ Test and provide evidence for all three security requirements (blocked malicious
 
 |Task / Subtask|Description|State|
 |---|---|---|
-|**Task 8** – Extend pipeline with automated deployment|Add deployment steps to Azure Container Apps in the GitHub Actions workflow|🔲 To Do|
+|**Task 8** – Extend pipeline with automated deployment|Add deployment steps to Azure Container Apps in the GitHub Actions workflow|✅ Done|
 |**Task 9** – Research container monitoring methods|Investigate Docker API, docker stats, cAdvisor, and similar tools|🔲 To Do|
 |**Task 9** – Develop Python scripts for metric collection|Create/extend scripts to capture metrics from the Docker environment|🔲 To Do|
 |**Task 9** – Integrate container metrics into Flask dashboard|Display collected container data on the web frontend|🔲 To Do|
