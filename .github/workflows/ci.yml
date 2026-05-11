@@ -10,6 +10,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'monitoring-web/**'
+  workflow_dispatch: # Allows running manually from the Actions tab
 
 env:
   REGISTRY: acrknowledgehub570863.azurecr.io
