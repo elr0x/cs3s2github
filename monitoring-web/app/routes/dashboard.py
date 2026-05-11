@@ -8,6 +8,8 @@ from app.auth import entra_auth
 logger = logging.getLogger(__name__)
 dashboard_bp = Blueprint("dashboard", __name__)
 
+DEFAULT_STATUS_SUMMARY = {"OK": 0, "WARNING": 0, "CRITICAL": 0, "UNKNOWN": 0}
+
 
 @dashboard_bp.route("/", methods=["GET"])
 @entra_auth.login_required
@@ -29,10 +31,10 @@ def overview():
         metrics_by_host = DataProcessor.aggregate_metrics_by_host(metrics)
         status_summary = DataProcessor.get_status_summary(metrics)
 
-        # Calculate host status
+        # Calculate host status (guard against None values)
         host_status = {}
         for host, host_metrics in metrics_by_host.items():
-            statuses = [m.get("status", "UNKNOWN") for m in host_metrics]
+            statuses = [(m.get("status") or "UNKNOWN").upper() for m in host_metrics]
             if "CRITICAL" in statuses:
                 host_status[host] = "CRITICAL"
             elif "WARNING" in statuses:
@@ -41,7 +43,7 @@ def overview():
                 host_status[host] = "OK"
 
         context = {
-            "metrics": formatted_metrics[:50],  # Show latest 50
+            "metrics": formatted_metrics[:50],
             "metrics_by_host": metrics_by_host,
             "status_summary": status_summary,
             "host_status": host_status,
@@ -58,7 +60,7 @@ def overview():
             "dashboard/overview.html",
             metrics=[],
             metrics_by_host={},
-            status_summary={},
+            status_summary=dict(DEFAULT_STATUS_SUMMARY),
             host_status={},
             total_hosts=0,
             total_metrics=0,
