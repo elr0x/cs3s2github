@@ -15,5 +15,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Run the monitoring client
-CMD ["python", "monitor.py"]
+# Run the monitoring client in continuous mode (every 60s)
+CMD ["python", "monitor.py", "--interval", "60"]

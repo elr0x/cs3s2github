@@ -45,6 +45,8 @@ services:
       MONITOR_API_URL: http://monitoring-web:5001/api/v1
       MONITOR_API_KEY: ${API_KEY:-dev-api-key-change-in-production}
       COLLECTION_INTERVAL: 60
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # Docker socket for container metrics
     networks:
       - monitoring
     depends_on:

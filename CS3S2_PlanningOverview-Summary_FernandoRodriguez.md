@@ -100,7 +100,7 @@
 
 |Subtask|Description|State|
 |---|---|---|
-|Analyze current DNS security posture|Research DoH, DoT, and DNSSEC; select suitable mechanism(s) for The Knowledge Hub|🔲 To Do|
+|Analyze current DNS security posture|Research DoH, DoT, and DNSSEC; select suitable mechanism(s) for The Knowledge Hub|✅ Done|
 
 ## Week 3 – Deployment, Security & Advanced Monitoring
 
@@ -114,9 +114,9 @@
 
 |Subtask|Description|State|
 |---|---|---|
-|Research container monitoring methods|Investigate Docker API, docker stats, cAdvisor, and similar tools|🔲 To Do|
-|Develop Python scripts for metric collection|Create/extend scripts to capture metrics from the Docker environment|🔲 To Do|
-|Integrate container metrics into Flask dashboard|Display collected container data on the web frontend|🔲 To Do|
+|Research container monitoring methods|Investigate Docker API, docker stats, cAdvisor, and similar tools|✅ Done|
+|Develop Python scripts for metric collection|Create/extend scripts to capture metrics from the Docker environment|✅ Done|
+|Integrate container metrics into Flask dashboard|Display collected container data on the web frontend|✅ Done|
 
 ## Task 10: Cloud Security Hardening (ZTA)
 
@@ -228,7 +228,7 @@ Test and provide evidence for all three security requirements (blocked malicious
 |**Task 5** – Implement persistent storage with volumes|Configure volumes for monitoring data and application configuration|✅ Done|
 |**Task 6** – Design CI/CD pipeline|Define triggers, build steps, push to registry, and deployment strategy|✅ Done|
 |**Task 6** – Implement initial GitHub Actions workflow|Set up build and image push pipeline|✅ Done|
-|**Task 7** – Analyze current DNS security posture|Research DoH, DoT, and DNSSEC; select suitable mechanism(s) for The Knowledge Hub|🔲 To Do|
+|**Task 7** – Analyze current DNS security posture|Research DoH, DoT, and DNSSEC; select suitable mechanism(s) for The Knowledge Hub|✅ Done|
 
 ## Week 3
 
