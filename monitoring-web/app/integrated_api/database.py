@@ -27,8 +27,8 @@ def insert_metric(
     """Insert a monitoring metric into the MonitoringMetrics table."""
     sql = """
         INSERT INTO MonitoringMetrics
-            (source_host, source_type, metric_name, metric_value, unit, status)
-        VALUES (?, ?, ?, ?, ?, ?)
+            (source_host, source_type, metric_name, metric_value, unit, status, timestamp)
+        VALUES (?, ?, ?, ?, ?, ?, GETUTCDATE())
     """
     try:
         with get_connection() as conn:
