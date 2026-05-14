@@ -250,8 +250,8 @@ Test and provide evidence for all three security requirements (blocked malicious
 
 |Task / Subtask|Description|State|
 |---|---|---|
-|**Task 13** – Final integration of all components|Ensure frontend, backend, collectors, authentication, and CI/CD work end-to-end|🔲 To Do|
-|**Task 13** – Thorough system testing|Test web frontend, containers, CI/CD pipeline, Entra ID auth, and security enhancements|🔲 To Do|
+|**Task 13** – Final integration of all components|Ensure frontend, backend, collectors, authentication, and CI/CD work end-to-end|✅ Done|
+|**Task 13** – Thorough system testing|Test web frontend, containers, CI/CD pipeline, Entra ID auth, and security enhancements|✅ Done|
 |**Task 14** – System architecture document|Overall diagram, container design, and data flow documentation|🔲 To Do|
 |**Task 14** – Deployment and configuration guide|Dockerfiles, docker-compose.yml, GitHub Actions workflow, on-premise setup instructions|🔲 To Do|
 |**Task 14** – Security report|ZTA measures applied, Entra ID integration details, DNS security implementation|🔲 To Do|

@@ -1,93 +1,405 @@
-# CS3S2
+# CS3S2 - Knowledge Hub Hybrid Cloud Monitoring System
 
+> **Case Study 3 - LO3: Automation** | Hybrid Cloud Infrastructure Monitoring
 
+A comprehensive monitoring solution for managing on-premises infrastructure (GNS3), Azure PaaS services, and containerized applications through a unified web interface.
 
-## Getting started
+## 📋 Project Overview
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The Knowledge Hub is transitioning from pure on-premises setup into a **hybrid cloud environment**. This project implements a modern monitoring system with:
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- **Web Frontend**: Modern Flask application with interactive dashboards
+- **Backend API**: RESTful API for metrics collection and storage
+- **Monitoring Client**: Data collectors from on-premises infrastructure
+- **Cloud Integration**: Azure SQL Database and Entra ID authentication
+- **Container Support**: Docker containerization for all components
 
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### Architecture Diagram
 
 ```
-cd existing_repo
-git remote add origin https://git.fhict.nl/I570863/cs3s2.git
-git branch -M main
-git push -uf origin main
+┌─────────────────────────────────────────────────────────────────┐
+│                     Web Browser / Client                         │
+│                   (Bootstrap UI, Responsive)                     │
+└────────────────────────────┬────────────────────────────────────┘
+                             │ HTTPS
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              Monitoring Web Frontend (Flask)                     │
+│  ├─ Dashboard (Overview, Metrics, Host Details)                 │
+│  ├─ AJAX API Endpoints                                          │
+│  ├─ Bootstrap UI with Charts (Chart.js)                         │
+│  └─ API Client Service                                          │
+└────────────────────────────┬────────────────────────────────────┘
+                             │ HTTP/REST
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              Monitoring Backend API (Flask)                      │
+│  ├─ /api/v1/metrics (GET/POST)                                  │
+│  ├─ /api/v1/health (GET/POST)                                   │
+│  └─ API Key Authentication                                      │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                    ┌────────┴────────┐
+                    │                 │
+                    ▼                 ▼
+        ┌──────────────────┐  ┌──────────────┐
+        │  Azure SQL DB    │  │  Monitoring  │
+        │                  │  │  Client      │
+        └──────────────────┘  └──────┬───────┘
+                                     │
+                    ┌────────────────┴────────────────┐
+                    │                                 │
+                    ▼                                 ▼
+        ┌──────────────────────┐      ┌──────────────────────┐
+        │  On-Prem (GNS3)      │      │  Azure (PaaS)        │
+        │  - Domain Controller │      │  - App Services      │
+        │  - File Servers      │      │  - Azure SQL DB      │
+        │  - pfSense (VPN)     │      │  - Container Apps    │
+        └──────────────────────┘      └──────────────────────┘
 ```
 
-## Integrate with your tools
+## 🚀 Quick Start
 
-- [ ] [Set up project integrations](https://git.fhict.nl/I570863/cs3s2/-/settings/integrations)
+### Prerequisites
+- Docker and Docker Compose
+- Python 3.9+ (for local development)
+- Git
 
-## Collaborate with your team
+### Option 1: Docker Compose (Recommended)
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```bash
+# Clone repository
+git clone <repository-url>
+cd cs3s2
 
-## Test and Deploy
+# Create .env file
+cp monitoring-web/.env.example .env
 
-Use the built-in continuous integration in GitLab.
+# Edit .env with your settings
+# Important: Set API_KEY, API_BASE_URL, and DB_CONNECTION_STRING
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+# Start all services
+docker-compose up -d
 
-***
+# View logs
+docker-compose logs -f monitoring-web
+docker-compose logs -f monitoring-api
+```
 
-# Editing this README
+Access the application:
+- **Frontend**: http://localhost:5001
+- **Backend API**: http://localhost:5000/api/v1
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### Option 2: Local Development
 
-## Suggestions for a good README
+```bash
+# 1. Start Backend API
+cd monitoring-api
+python -m venv venv
+source venv/bin/activate  # or: venv\Scripts\activate (Windows)
+pip install -r requirements.txt
+flask run
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+# 2. Start Frontend (in new terminal)
+cd monitoring-web
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+flask run --port 5001
+```
 
-## Name
-Choose a self-explaining name for your project.
+## 📁 Project Structure
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+```
+cs3s2/
+├── monitoring-api/              # Backend API (Flask)
+│   ├── app/
+│   │   ├── __init__.py         # App factory
+│   │   ├── config.py           # Configuration
+│   │   ├── models.py           # Data models
+│   │   ├── database.py         # DB operations
+│   │   ├── auth.py             # Authentication
+│   │   └── routes/             # API endpoints
+│   ├── requirements.txt
+│   ├── wsgi.py
+│   ├── Dockerfile
+│   └── README.md
+│
+├── monitoring-web/              # Frontend Application (Flask) ⭐ NEW
+│   ├── app/
+│   │   ├── __init__.py         # App factory
+│   │   ├── config.py           # Configuration
+│   │   ├── routes/
+│   │   │   ├── main.py        # Main routes
+│   │   │   ├── dashboard.py   # Dashboard views
+│   │   │   └── api.py         # AJAX endpoints
+│   │   ├── services/
+│   │   │   ├── api_client.py  # Backend API client
+│   │   │   └── data_processor.py # Data processing
+│   │   ├── templates/          # Jinja2 templates
+│   │   │   ├── base.html
+│   │   │   ├── index.html
+│   │   │   ├── about.html
+│   │   │   └── dashboard/      # Dashboard templates
+│   │   └── static/             # CSS, JS files
+│   ├── tests/
+│   ├── requirements.txt
+│   ├── wsgi.py
+│   ├── Dockerfile
+│   ├── .env.example
+│   └── README.md
+│
+├── monitoring-client/           # Data Collection Client
+│   ├── monitor.py
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   └── README.md
+│
+├── docker-compose.yml          # Compose configuration (updated)
+├── README.md                   # This file
+└── [Bicep files, PowerShell scripts, design docs]
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## 🔧 Configuration
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### Environment Variables
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Create `.env` file based on `monitoring-web/.env.example`:
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+```env
+# Flask
+FLASK_ENV=development
+FLASK_DEBUG=true
+SECRET_KEY=your-secure-key
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+# Backend API
+API_BASE_URL=http://localhost:5000/api/v1
+API_KEY=your-api-key
+API_TIMEOUT=10
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+# Refresh Intervals
+METRICS_REFRESH_INTERVAL=30
+HEALTH_REFRESH_INTERVAL=60
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+# Authentication
+AUTH_ENABLED=false
+# (Entra ID settings for future use)
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## 🎯 Key Features
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### Frontend (monitoring-web) ⭐ NEW
+- ✅ **Real-time Dashboards**: Live monitoring with auto-refresh
+- ✅ **Multi-host Support**: Monitor multiple infrastructure components
+- ✅ **Interactive Charts**: Visual representation of metrics (Chart.js)
+- ✅ **Responsive Design**: Works on desktop, tablet, mobile
+- ✅ **Filtering & Drill-down**: Filter metrics by host, metric type
+- ✅ **Status Indicators**: Color-coded alerts (OK, WARNING, CRITICAL)
+- ✅ **Modern UI**: Bootstrap 5 based design
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### Backend API (monitoring-api)
+- ✅ **RESTful Endpoints**: `/api/v1/metrics`, `/api/v1/health`
+- ✅ **API Key Auth**: Secure endpoint protection
+- ✅ **Azure SQL Integration**: Persistent data storage
+- ✅ **Scalable Design**: Blueprint-based architecture
+- ✅ **Error Handling**: Comprehensive error responses
 
-## License
-For open source projects, say how it is licensed.
+### Data Collection
+- ✅ **Metrics Collection**: From on-premises and cloud hosts
+- ✅ **Health Checks**: Service availability monitoring
+- ✅ **Configurable Intervals**: Adjustable collection frequency
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## 📊 Usage
+
+### Dashboard Pages
+
+1. **Home** (`/`)
+   - System status overview
+   - Quick access to monitoring tools
+
+2. **Dashboard Overview** (`/dashboard/`)
+   - Total metrics count
+   - Monitored hosts overview
+   - Status summary (OK, WARNING, CRITICAL)
+   - Recent metrics table
+
+3. **Metrics View** (`/dashboard/metrics`)
+   - Detailed metrics list
+   - Filter by host or metric type
+   - Pagination support
+
+4. **Host Details** (`/dashboard/host/<host>`)
+   - Host-specific metrics
+   - Metric statistics (avg, min, max)
+   - Time-series charts
+
+## 🐳 Docker Deployment
+
+### Build Images
+```bash
+# Build all images
+docker-compose build
+
+# Build specific service
+docker-compose build monitoring-web
+```
+
+### Start Services
+```bash
+# Start all services
+docker-compose up -d
+
+# Start specific service
+docker-compose up -d monitoring-web
+
+# View logs
+docker-compose logs -f monitoring-web
+
+# Stop services
+docker-compose down
+```
+
+### Health Checks
+```bash
+# Check frontend
+curl http://localhost:5001/health
+
+# Check backend API
+curl http://localhost:5000/api/v1/health/status
+
+# Docker health status
+docker ps --filter "name=monitoring"
+```
+
+## 🧪 Testing
+
+### Run Tests
+```bash
+cd monitoring-web
+pytest
+
+# With coverage
+pytest --cov=app tests/
+
+# Verbose output
+pytest -v tests/test_main.py
+```
+
+### Test Coverage
+```bash
+pytest --cov=app --cov-report=html tests/
+# Open htmlcov/index.html in browser
+```
+
+## 🔒 Security Features
+
+- [x] API Key authentication
+- [x] HTTPS/TLS ready
+- [x] CSRF protection setup
+- [x] Secure session cookies
+- [x] Input validation
+- [ ] Entra ID OAuth2/OIDC (planned)
+- [ ] Rate limiting (planned)
+- [ ] Audit logging (planned)
+
+## 📈 Performance
+
+- Configurable cache strategies
+- Efficient API calls with timeout handling
+- Client-side rendering with Chart.js
+- Responsive design optimization
+- Connection pooling for database
+
+## 🐛 Troubleshooting
+
+### Backend Connection Failed
+```bash
+# Check if backend is running
+curl http://localhost:5000/api/v1/health/status
+
+# Check environment variables
+echo $API_BASE_URL
+echo $API_KEY
+
+# Verify network connectivity
+docker network inspect cs3s2_monitoring
+```
+
+### No Data Showing
+- Verify API_KEY matches in both frontend and backend
+- Check if monitoring client is collecting data
+- Inspect browser console for errors (F12)
+- Check Docker logs: `docker-compose logs monitoring-api`
+
+### Port Already in Use
+```bash
+# Change ports in docker-compose.yml or use:
+docker-compose -p myproject up -d
+```
+
+## 📚 Documentation
+
+- [Frontend README](./monitoring-web/README.md)
+- [Backend README](./monitoring-api/README.md)
+- [Client README](./monitoring-client/README.md)
+- [Project Plan](./CS3S2_PlanningOverview-Summary_FernandoRodriguez.md)
+
+## 🤝 Contributing
+
+1. Create feature branch: `git checkout -b feature/my-feature`
+2. Make changes and test locally
+3. Commit: `git commit -m "Add feature"`
+4. Push: `git push origin feature/my-feature`
+5. Create Pull Request
+
+## 📝 License
+
+© 2024 The Knowledge Hub - All rights reserved
+
+## 📞 Support
+
+For issues or questions:
+1. Check existing documentation
+2. Review troubleshooting section
+3. Contact development team
+
+## 🗺️ Roadmap
+
+- [ ] Week 1: Analysis, Design, Foundation ✓ (In Progress)
+  - [x] Project Planning & Requirements Analysis
+  - [x] Web Frontend Development (Task 2) ⭐ NEW
+  - [x] Research & Architecture Design
+- [ ] Week 2: Containerization, CI/CD Setup
+  - [ ] Secure Authentication (Entra ID)
+  - [ ] Application Containerization
+  - [ ] CI/CD Pipeline - GitHub Actions
+  - [ ] DNS Security Analysis
+- [ ] Week 3: Deployment, Security, Monitoring
+  - [ ] CI/CD Pipeline - Deployment
+  - [ ] Container Platform Monitoring
+  - [ ] Cloud Security Hardening (ZTA)
+  - [ ] Network Enhancements
+  - [ ] Service Resilience & Backup
+- [ ] Week 4: Testing, Documentation, Presentation
+  - [ ] Final Integration & Testing
+  - [ ] Documentation Set
+  - [ ] Presentation & Reflection
+
+See [Project Plan](./CS3S2_PlanningOverview-Summary_FernandoRodriguez.md) for detailed timeline.
+
+## ✨ What's New (v2.0)
+
+This version includes the improved **monitoring-web** frontend application featuring:
+
+- Modern Flask application factory pattern
+- RESTful AJAX API endpoints for real-time data
+- Bootstrap 5 responsive UI with professional styling
+- Interactive dashboards with Chart.js visualizations
+- Modular service architecture (API client, data processor)
+- Comprehensive error handling and logging
+- Full test coverage with pytest
+- Docker containerization ready
+- Environment-based configuration
+- Production-ready deployment setup
+
+The web frontend connects to the existing backend API and provides a user-friendly interface for monitoring the hybrid infrastructure without requiring CLI or direct server access (REQ-S2P3-001).
