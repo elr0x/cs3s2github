@@ -1,5 +1,0 @@
-flask
-pyodbc
-python-dotenv
-requests
-gunicorn
